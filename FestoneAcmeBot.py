@@ -1,6 +1,6 @@
 #!/usr/bin/env python 
  
-import telegram.ext
+import telegram
 import logging
 
 import time
@@ -36,8 +36,31 @@ def echo(bot, update):
 				newFile.download(filename)
 				bot.sendMessage(update.message.chat_id, text="Grazie ! Video ricevuto ;-)")
 				#os.system("vlc -f --video-on-top --no-video-title-show  video &")
-				break	
-			
+					
+	if update.message.document:
+		newDocument = bot.getFile(update.message.document.file_id)
+	
+		while True:	
+			filename="video/P%06d.pdf" % randint(1,999999);
+			if os.path.isfile(filename):
+				continue
+			else:
+				newDocument.download(filename)
+				bot.sendMessage(update.message.chat_id, text="Grazie ! document ricevuto ;-)")
+				
+	if update.message.photo:
+		newPhoto = bot.getFile(update.message.photo.file_id)
+	
+		while True:	
+			filename="video/P%06d.jpg" % randint(1,999999);
+			if os.path.isfile(filename):
+				continue
+			else:
+				newPhoto.download(filename)
+				bot.sendMessage(update.message.chat_id, text="Grazie ! Photo ricevuta ;-)")			
+			break
+		
+		
 def error(bot, update, error):
 	logger.warn('Update "%s" caused error "%s"' % (update, error))
 
@@ -46,7 +69,7 @@ def main():
 	global screen
 	
 	#@SpennellandoBot
-	updater = telegram.ext.Updater("190231325:AAFgJ39Trmn1t4RsucDB6djLg64C1WVnNSE")	
+	updater = telegram.Updater("138682670:AAGpVS2brpdVCpJ872ZGl5sbe9KQbFUjAZQ")	
 	
 	# Get the dispatcher to register handlers
 	dp = updater.dispatcher
