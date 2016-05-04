@@ -68,7 +68,7 @@ def main():
 	global update_queue
 	global screen
 	
-	#@SpennellandoBot
+	#@MisiBot
 	updater = telegram.Updater("138682670:AAGpVS2brpdVCpJ872ZGl5sbe9KQbFUjAZQ")	
 	
 	# Get the dispatcher to register handlers
