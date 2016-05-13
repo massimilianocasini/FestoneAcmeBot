@@ -8,58 +8,57 @@ import os
 import os.path				
 
 from random import randint	
+
 	
 # Enable logging
 logging.basicConfig(
 		format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-		level=logging.INFO)
+		level=logging.DEBUG)
 
 logger = logging.getLogger(__name__)
 
 def cmd_start(bot, update):
-	bot.sendMessage(update.message.chat_id, "Ciao ! Sono il video box del Festone Acme. Manda il tuo video ;-) \n");
+	bot.sendMessage(update.message.chat_id, "Ciao ! Sono il video box del Battesimo di Sofia e Federico. Contribuisci al ricordo mandando il tuo video oppure la tua foto  ;-) \n");
 	
 
 def echo(bot, update):	
+	global username
+	global firstLastname
 	print " Username  : [" + update.message.from_user.username + "]" ,
 	print " Firstname : [" + update.message.from_user.first_name + "]" ,
-	print " Lastname  : [" + update.message.from_user.last_name + "]"
- 
-	if update.message.video:
-		newFile = bot.getFile(update.message.video.file_id)
+	print " Lastname  : [" + update.message.from_user.last_name + "]" ,
 
-		while True:	
-			filename="video/V%06d.mov" % randint(1,999999);
-			if os.path.isfile(filename):
-				continue
-			else:
-				newFile.download(filename)
-				bot.sendMessage(update.message.chat_id, text="Grazie ! Video ricevuto ;-)")
-				#os.system("vlc -f --video-on-top --no-video-title-show  video &")
-					
-	if update.message.document:
-		newDocument = bot.getFile(update.message.document.file_id)
+	username = update.message.from_user.username
+	firstLastname = update.message.from_user.first_name+"_"+update.message.from_user.last_name
 	
-		while True:	
-			filename="video/P%06d.pdf" % randint(1,999999);
-			if os.path.isfile(filename):
-				continue
-			else:
-				newDocument.download(filename)
-				bot.sendMessage(update.message.chat_id, text="Grazie ! document ricevuto ;-)")
-				
-	if update.message.photo:
-		newPhoto = bot.getFile(update.message.photo.file_id)
 	
-		while True:	
-			filename="video/P%06d.jpg" % randint(1,999999);
-			if os.path.isfile(filename):
-				continue
-			else:
-				newPhoto.download(filename)
-				bot.sendMessage(update.message.chat_id, text="Grazie ! Photo ricevuta ;-)")			
-			break
+	if update.message.video:
+		newVideo = bot.getFile(update.message.video.file_id)
 		
+		while True:	
+		#	filename="download/video_"+update.message.from_user.first_name+"_%d.mov" % randint(1,999999);
+			filename="download/video_"+username+"_"+firstLastname+"_%d.mov" % randint(1,999999);
+			if os.path.isfile(filename):
+				continue
+			else:
+				newVideo.download(filename)
+				bot.sendMessage(update.message.chat_id, text='Grazie ' +update.message.from_user.first_name+ '! Video ricevuto ;-)')
+				#os.system("vlc -f --video-on-top --no-video-title-show  video &")
+				break
+
+
+	if update.message.photo:
+		photo_id = update.message.photo[-1].file_id
+		photo_file = bot.getFile(photo_id)
+		while True:	
+		#	filename="download/foto_"+update.message.from_user.first_name+"_%d.jpg" % randint(1,999999);
+			filename="download/foto_"+username+"_"+firstLastname+"_%d.jpg" % randint(1,999999);
+			if os.path.isfile(filename):
+				continue
+			else:
+				photo_file.download(filename)
+				bot.sendMessage(update.message.chat_id, text='Grazie ' +update.message.from_user.first_name+ '! Foto ricevuta ;-)')
+				break
 		
 def error(bot, update, error):
 	logger.warn('Update "%s" caused error "%s"' % (update, error))
@@ -67,6 +66,7 @@ def error(bot, update, error):
 def main():	
 	global update_queue
 	global screen
+	
 	
 	#@SpennellandoBot
 	updater = telegram.Updater("138682670:AAGpVS2brpdVCpJ872ZGl5sbe9KQbFUjAZQ")	
