@@ -29,6 +29,7 @@ def echo(bot, update):
 	print " Lastname  : [" + update.message.from_user.last_name + "]" ,
 
 	username = update.message.from_user.username
+	firstname = update.message.from_user.first_name
 	firstLastname = update.message.from_user.first_name+"_"+update.message.from_user.last_name
 	
 	
@@ -36,30 +37,47 @@ def echo(bot, update):
 		newVideo = bot.getFile(update.message.video.file_id)
 		
 		while True:	
-		#	filename="download/video_"+update.message.from_user.first_name+"_%d.mov" % randint(1,999999);
+	
 			filename="download/video_"+username+"_"+firstLastname+"_%d.mov" % randint(1,999999);
 			if os.path.isfile(filename):
 				continue
 			else:
 				newVideo.download(filename)
-				bot.sendMessage(update.message.chat_id, text='Grazie ' +update.message.from_user.first_name+ '! Video ricevuto ;-)')
+				bot.sendMessage(update.message.chat_id, text='Grazie ' +firstname+'! Ho ricevuto il tuo Video!! Tra qualche giorno riceverai, sul tuo account Telegram, il video montaggio per ricordare questo giorno!')
 				#os.system("vlc -f --video-on-top --no-video-title-show  video &")
 				break
 
 
 	if update.message.photo:
+	# indice 0 foto piccolissima, 1 foto piccola, 2 foto media, 3 foto grande
 		photo_id = update.message.photo[-1].file_id
 		photo_file = bot.getFile(photo_id)
 		while True:	
-		#	filename="download/foto_"+update.message.from_user.first_name+"_%d.jpg" % randint(1,999999);
+		
 			filename="download/foto_"+username+"_"+firstLastname+"_%d.jpg" % randint(1,999999);
+			#filename="download/foto_"+username+"_"+firstLastname+"_"+photo_id+".jpg"
 			if os.path.isfile(filename):
 				continue
 			else:
 				photo_file.download(filename)
-				bot.sendMessage(update.message.chat_id, text='Grazie ' +update.message.from_user.first_name+ '! Foto ricevuta ;-)')
+				bot.sendMessage(update.message.chat_id, text='Grazie ' +firstname+'! Ho ricevuto la tua Foto!! Tra qualche giorno riceverai, sul tuo account Telegram, il video montaggio per ricordare questo giorno!')
 				break
+				
+	if update.message.document:
+	
+		document_id = update.message.document.file_id
+		document_name = update.message.document.file_name
+		document_file = bot.getFile(document_id)
+		while True:	
 		
+			filename="download/"+username+"_"+firstLastname+"_"+document_name;
+			if os.path.isfile(filename):
+				continue
+			else:
+				document_file.download(filename)
+				bot.sendMessage(update.message.chat_id, text='Grazie ' +firstname+'! Ho ricevuto il tuo File!! Tra qualche giorno riceverai, sul tuo account Telegram, il video montaggio per ricordare questo giorno!')
+				break	
+				
 def error(bot, update, error):
 	logger.warn('Update "%s" caused error "%s"' % (update, error))
 
@@ -67,12 +85,6 @@ def main():
 	global update_queue
 	global screen
 	
-<<<<<<< HEAD
-	
-	#@SpennellandoBot
-=======
-	#@MisiBot
->>>>>>> 1cb2f32241ff6353bec0fecad248460c6b52e50b
 	updater = telegram.Updater("138682670:AAGpVS2brpdVCpJ872ZGl5sbe9KQbFUjAZQ")	
 	
 	# Get the dispatcher to register handlers
