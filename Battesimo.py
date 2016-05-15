@@ -24,6 +24,7 @@ def cmd_start(bot, update):
 def echo(bot, update):	
 	global username
 	global firstLastname
+	global ringraziamentoText
 	print " Username  : [" + update.message.from_user.username + "]" ,
 	print " Firstname : [" + update.message.from_user.first_name + "]" ,
 	print " Lastname  : [" + update.message.from_user.last_name + "]" ,
@@ -31,7 +32,7 @@ def echo(bot, update):
 	username = update.message.from_user.username
 	firstname = update.message.from_user.first_name
 	firstLastname = update.message.from_user.first_name+"_"+update.message.from_user.last_name
-	
+	ringraziamentoText = 'Grazie ' +firstname+'! Ho ricevuto il tuo Upload!! Tra qualche giorno riceverai, sul tuo account Telegram, il video ricordo di questo giorno!'
 	
 	if update.message.video:
 		newVideo = bot.getFile(update.message.video.file_id)
@@ -43,7 +44,7 @@ def echo(bot, update):
 				continue
 			else:
 				newVideo.download(filename)
-				bot.sendMessage(update.message.chat_id, text='Grazie ' +firstname+'! Ho ricevuto il tuo Video!! Tra qualche giorno riceverai, sul tuo account Telegram, il video montaggio per ricordare questo giorno!')
+				bot.sendMessage(update.message.chat_id, text=ringraziamentoText)
 				#os.system("vlc -f --video-on-top --no-video-title-show  video &")
 				break
 
@@ -60,7 +61,7 @@ def echo(bot, update):
 				continue
 			else:
 				photo_file.download(filename)
-				bot.sendMessage(update.message.chat_id, text='Grazie ' +firstname+'! Ho ricevuto la tua Foto!! Tra qualche giorno riceverai, sul tuo account Telegram, il video montaggio per ricordare questo giorno!')
+				bot.sendMessage(update.message.chat_id, text=ringraziamentoText)
 				break
 				
 	if update.message.document:
@@ -75,8 +76,32 @@ def echo(bot, update):
 				continue
 			else:
 				document_file.download(filename)
-				bot.sendMessage(update.message.chat_id, text='Grazie ' +firstname+'! Ho ricevuto il tuo File!! Tra qualche giorno riceverai, sul tuo account Telegram, il video montaggio per ricordare questo giorno!')
+				bot.sendMessage(update.message.chat_id, text=ringraziamentoText)
 				break	
+
+	if update.message.sticker:
+		sticker_image_file_fede = open("federico.jpg")
+		sticker_image_file_sofi = open("sofia.jpg")
+		sticker_image_file_pdf = open("battesimo.pdf")
+		
+		sticker_id = update.message.sticker.file_id
+		sticker_file = bot.getFile(sticker_id)
+		while True:	
+		
+			filename="download/"+sticker_id+"_%d.webp" % randint(1,999999);
+			if os.path.isfile(filename):
+				continue
+			else:
+				sticker_file.download(filename)
+				#Invia uno sticker su base sticker.file_id
+				#bot.sendSticker(update.message.chat_id, sticker= 'BQADBAADHAADyIsGAAFZfq1bphjqlgI');
+				
+				#Invia uno sticker su base file presente sul disco
+				bot.sendDocument(update.message.chat_id, document= sticker_image_file_pdf);
+				#bot.sendSticker(update.message.chat_id, sticker= sticker_image_file_fede);
+				#bot.sendSticker(update.message.chat_id, sticker= sticker_image_file_sofi);
+				bot.sendMessage(update.message.chat_id, text=ringraziamentoText)
+				break
 				
 def error(bot, update, error):
 	logger.warn('Update "%s" caused error "%s"' % (update, error))
