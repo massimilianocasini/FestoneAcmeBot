@@ -8,7 +8,6 @@ import os
 import os.path				
 
 from random import randint	
-
 	
 # Enable logging
 logging.basicConfig(
@@ -18,13 +17,14 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 def cmd_start(bot, update):
-	bot.sendMessage(update.message.chat_id, "Ciao ! Sono il video box del Battesimo di Sofia e Federico. Contribuisci al ricordo mandando il tuo video oppure la tua foto  ;-) \n");
+	bot.sendMessage(update.message.chat_id, "Ciao ! Sono il VIDEOBOX del Battesimo di Sofia e Federico. Contribuisci al video ricordo!!! Fai un VIDEO o scatta una FOTO con il tuo cellulare e invialo!! \n");
 	
-
+#Definisco le variabili globali
 def echo(bot, update):	
 	global username
 	global firstLastname
 	global ringraziamentoText
+	global sticker_image_file_webp
 	print " Username  : [" + update.message.from_user.username + "]" ,
 	print " Firstname : [" + update.message.from_user.first_name + "]" ,
 	print " Lastname  : [" + update.message.from_user.last_name + "]" ,
@@ -32,7 +32,8 @@ def echo(bot, update):
 	username = update.message.from_user.username
 	firstname = update.message.from_user.first_name
 	firstLastname = update.message.from_user.first_name+"_"+update.message.from_user.last_name
-	ringraziamentoText = 'Grazie ' +firstname+'! Ho ricevuto il tuo Upload!! Tra qualche giorno riceverai, sul tuo account Telegram, il video ricordo di questo giorno!'
+	ringraziamentoText = 'Grazie ' +firstname+'! \n Ho ricevuto il tuo Upload!! \n Tra qualche giorno riceverai, sul tuo account Telegram, il video ricordo di questo giorno!'
+	sticker_image_file_webp = open("minions.webp")
 	
 	if update.message.video:
 		newVideo = bot.getFile(update.message.video.file_id)
@@ -61,7 +62,8 @@ def echo(bot, update):
 				continue
 			else:
 				photo_file.download(filename)
-				bot.sendMessage(update.message.chat_id, text=ringraziamentoText)
+				bot.sendDocument(update.message.chat_id, document= sticker_image_file_webp);
+				bot.sendMessage(update.message.chat_id, text=ringraziamentoText);
 				break
 				
 	if update.message.document:
@@ -76,13 +78,17 @@ def echo(bot, update):
 				continue
 			else:
 				document_file.download(filename)
-				bot.sendMessage(update.message.chat_id, text=ringraziamentoText)
+				bot.sendDocument(update.message.chat_id, document= sticker_image_file_webp);
+				bot.sendMessage(update.message.chat_id, text=ringraziamentoText);
 				break	
+				
+				
 
 	if update.message.sticker:
-		sticker_image_file_fede = open("federico.jpg")
-		sticker_image_file_sofi = open("sofia.jpg")
-		sticker_image_file_pdf = open("battesimo.pdf")
+		#sticker_image_file_fede = open("federico.jpg")
+		#sticker_image_file_sofi = open("sofia.jpg")
+		#sticker_image_file_pdf = open("battesimo.pdf")
+		#sticker_image_file_webp = open("minions.webp")
 		
 		sticker_id = update.message.sticker.file_id
 		sticker_file = bot.getFile(sticker_id)
@@ -97,10 +103,11 @@ def echo(bot, update):
 				#bot.sendSticker(update.message.chat_id, sticker= 'BQADBAADHAADyIsGAAFZfq1bphjqlgI');
 				
 				#Invia uno sticker su base file presente sul disco
-				bot.sendDocument(update.message.chat_id, document= sticker_image_file_pdf);
+				#bot.sendDocument(update.message.chat_id, document= sticker_image_file_pdf);
 				#bot.sendSticker(update.message.chat_id, sticker= sticker_image_file_fede);
 				#bot.sendSticker(update.message.chat_id, sticker= sticker_image_file_sofi);
-				bot.sendMessage(update.message.chat_id, text=ringraziamentoText)
+				bot.sendDocument(update.message.chat_id, document= sticker_image_file_webp);
+				bot.sendMessage(update.message.chat_id, text=ringraziamentoText);
 				break
 				
 def error(bot, update, error):
@@ -110,7 +117,7 @@ def main():
 	global update_queue
 	global screen
 	
-	updater = telegram.Updater("138682670:AAGpVS2brpdVCpJ872ZGl5sbe9KQbFUjAZQ")	
+	updater = telegram.Updater("210389773:AAEfUq6tMf87Zb2g209hmL0SAJKUz8XbBhI")	
 	
 	# Get the dispatcher to register handlers
 	dp = updater.dispatcher
